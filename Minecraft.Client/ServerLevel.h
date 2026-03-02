@@ -114,7 +114,7 @@ protected:
 public:
 	MinecraftServer *getServer();
 	EntityTracker *getTracker();
-	void setTimeAndAdjustTileTicks(int64_t newTime);
+	void setTimeAndAdjustTileTicks(__int64 newTime);
 	PlayerChunkMap *getChunkMap();
 
 	void queueSendTileUpdate(int x, int y, int z); // 4J Added
@@ -142,7 +142,7 @@ public:
 	virtual bool addEntity(shared_ptr<Entity> e);
 	void entityAddedExtra(shared_ptr<Entity> e);
 	void entityRemovedExtra(shared_ptr<Entity> e);
-
+	
 	virtual bool newPrimedTntAllowed();
 	virtual bool newFallingTileAllowed();
 

@@ -38,7 +38,7 @@ void ConsoleSchematicFile::save(DataOutputStream *dos)
 		dos->writeInt(m_zSize);
 
 		byteArray ba(new BYTE[ m_data.length ], m_data.length);
-		Compression::getCompression()->CompressLZXRLE(	ba.data, &ba.length,
+		Compression::getCompression()->CompressLZXRLE(	ba.data, &ba.length, 
 													m_data.data, m_data.length);
 
 		dos->writeInt(ba.length);
@@ -71,13 +71,13 @@ void ConsoleSchematicFile::load(DataInputStream *dis)
 		m_ySize = dis->readInt();
 		m_zSize = dis->readInt();
 
-		int compressedSize = dis->readInt();
+		int compressedSize = dis->readInt();		
 		byteArray compressedBuffer(compressedSize);
 		dis->readFully(compressedBuffer);
 
 		if(m_data.data != NULL)
 		{
-			delete [] m_data.data;
+			delete [] m_data.data; 
 			m_data.data = NULL;
 		}
 
@@ -145,7 +145,7 @@ void ConsoleSchematicFile::load(DataInputStream *dis)
 				double z = pos->get(2)->data;
 
 				if( type == eTYPE_PAINTING || type == eTYPE_ITEM_FRAME )
-				{
+				{					
 					x = ((IntTag *) eTag->get(L"TileX") )->data;
 					y = ((IntTag *) eTag->get(L"TileY") )->data;
 					z = ((IntTag *) eTag->get(L"TileZ") )->data;
@@ -184,7 +184,7 @@ void ConsoleSchematicFile::save_tags(DataOutputStream *dos)
 	delete tag;
 }
 
-int64_t ConsoleSchematicFile::applyBlocksAndData(LevelChunk *chunk, AABB *chunkBox, AABB *destinationBox, ESchematicRotation rot)
+__int64 ConsoleSchematicFile::applyBlocksAndData(LevelChunk *chunk, AABB *chunkBox, AABB *destinationBox, ESchematicRotation rot)
 {
 	int xStart = max(destinationBox->x0, (double)chunk->x*16);
 	int xEnd = min(destinationBox->x1, (double)((xStart>>4)<<4) + 16);
@@ -281,7 +281,7 @@ int64_t ConsoleSchematicFile::applyBlocksAndData(LevelChunk *chunk, AABB *chunkB
 	//		blockData[i] = Tile::whiteStone_Id;
 	//	}
 	//}
-
+	
 	PIXBeginNamedEvent(0,"Setting Block data");
 	chunk->setBlockData(blockData);
 	PIXEndNamedEvent();
@@ -323,7 +323,7 @@ int64_t ConsoleSchematicFile::applyBlocksAndData(LevelChunk *chunk, AABB *chunkB
 
 // At the point that this is called, we have all the neighbouring chunks loaded in (and generally post-processed, apart from this lighting pass), so
 // we can do the sort of lighting that might propagate out of the chunk.
-int64_t ConsoleSchematicFile::applyLighting(LevelChunk *chunk, AABB *chunkBox, AABB *destinationBox, ESchematicRotation rot)
+__int64 ConsoleSchematicFile::applyLighting(LevelChunk *chunk, AABB *chunkBox, AABB *destinationBox, ESchematicRotation rot)
 {
 	int xStart = max(destinationBox->x0, (double)chunk->x*16);
 	int xEnd = min(destinationBox->x1, (double)((xStart>>4)<<4) + 16);
@@ -447,7 +447,7 @@ void ConsoleSchematicFile::applyTileEntities(LevelChunk *chunk, AABB *chunkBox, 
 			shared_ptr<TileEntity> teCopy = chunk->getTileEntity( (int)targetX & 15, (int)targetY & 15, (int)targetZ & 15 );
 
 			if ( teCopy != NULL )
-			{
+			{				
 				CompoundTag *teData = new CompoundTag();
 				te->save(teData);
 
@@ -480,7 +480,7 @@ void ConsoleSchematicFile::applyTileEntities(LevelChunk *chunk, AABB *chunkBox, 
 	for(AUTO_VAR(it,  m_entities.begin()); it != m_entities.end();)
 	{
 		Vec3 *source = it->first;
-
+		
 		double targetX = source->x;
 		double targetY = source->y + destinationBox->y0;
 		double targetZ = source->z;
@@ -500,7 +500,7 @@ void ConsoleSchematicFile::applyTileEntities(LevelChunk *chunk, AABB *chunkBox, 
 		if( e->GetType() == eTYPE_PAINTING )
 		{
 			shared_ptr<Painting> painting = dynamic_pointer_cast<Painting>(e);
-
+				
 			double tileX = painting->xTile;
 			double tileZ = painting->zTile;
 			schematicCoordToChunkCoord(destinationBox, painting->xTile, painting->zTile, rot, tileX, tileZ);
@@ -513,7 +513,7 @@ void ConsoleSchematicFile::applyTileEntities(LevelChunk *chunk, AABB *chunkBox, 
 		else if( e->GetType() == eTYPE_ITEM_FRAME )
 		{
 			shared_ptr<ItemFrame> frame = dynamic_pointer_cast<ItemFrame>(e);
-
+				
 			double tileX = frame->xTile;
 			double tileZ = frame->zTile;
 			schematicCoordToChunkCoord(destinationBox, frame->xTile, frame->zTile, rot, tileX, tileZ);
@@ -561,7 +561,7 @@ void ConsoleSchematicFile::generateSchematicFile(DataOutputStream *dos, Level *l
 		zStart-=1;
 	else if(zStart < 0 && zStart%2 !=0)
 		zStart-=1;
-
+	
 	// We want the end to be odd to have a total size that is even
 	if(xEnd > 0 && xEnd%2 == 0)
 		xEnd+=1;
@@ -615,7 +615,7 @@ void ConsoleSchematicFile::generateSchematicFile(DataOutputStream *dos, Level *l
 
 	// Every x is a whole row
 	for(int xPos = xStart; xPos < xStart + xSize; ++xPos)
-	{
+	{			
 		int xc = xPos >> 4;
 
 		int x0 = xPos - xc * 16;
@@ -624,7 +624,7 @@ void ConsoleSchematicFile::generateSchematicFile(DataOutputStream *dos, Level *l
 		if (x1 > 16) x1 = 16;
 
 		for(int zPos = zStart; zPos < zStart + zSize;)
-		{
+		{				
 			int zc = zPos >> 4;
 
 			int z0 = zStart - zc * 16;
@@ -718,7 +718,7 @@ void ConsoleSchematicFile::generateSchematicFile(DataOutputStream *dos, Level *l
 		{
 			CompoundTag *eTag = new CompoundTag();
 			if( e->save(eTag) )
-			{
+			{			
 				ListTag<DoubleTag> *pos = (ListTag<DoubleTag> *) eTag->getList(L"Pos");
 
 				pos->get(0)->data -= xStart;
@@ -726,7 +726,7 @@ void ConsoleSchematicFile::generateSchematicFile(DataOutputStream *dos, Level *l
 				pos->get(2)->data -= zStart;
 
 				if( e->GetType() == eTYPE_PAINTING || e->GetType() == eTYPE_ITEM_FRAME )
-				{
+				{					
 					((IntTag *) eTag->get(L"TileX") )->data -= xStart;
 					((IntTag *) eTag->get(L"TileY") )->data -= yStart;
 					((IntTag *) eTag->get(L"TileZ") )->data -= zStart;
@@ -767,7 +767,7 @@ void ConsoleSchematicFile::getBlocksAndData(LevelChunk *chunk, byteArray *data, 
 	//	skyLightP += skyLightData.length;
 	//	return;
 	//}
-
+	
 	bool bHasLower, bHasUpper;
 	bHasLower = bHasUpper = false;
 	int lowerY0, lowerY1, upperY0, upperY1;

@@ -48,14 +48,14 @@ public:
 
     void move(double xa, double ya, double za, bool noEntityCubes=false);	// 4J - added noEntityCubes parameter
 
-
+	
 	int m_iScreenSection; // assuming 4player splitscreen for now, or -1 for single player
-	uint64_t ullButtonsPressed; // Stores the button presses, since the inputmanager can be ticked faster than the minecraft
+	__uint64 ullButtonsPressed; // Stores the button presses, since the inputmanager can be ticked faster than the minecraft 
 									// player tick, and a button press and release combo can be missed in the minecraft::tick
 
-	uint64_t ullDpad_last;
-	uint64_t ullDpad_this;
-	uint64_t ullDpad_filtered;
+	__uint64 ullDpad_last;
+	__uint64 ullDpad_this;
+	__uint64 ullDpad_filtered;
 
 	// 4J-PB - moved these in from the minecraft structure, since they are per player things for splitscreen
 	//int ticks;
@@ -68,7 +68,7 @@ public:
 
 private:
 	float flyX, flyY, flyZ;
-
+	
 protected:
 	// 4J-PB - player's xbox pad
 	int m_iPad;

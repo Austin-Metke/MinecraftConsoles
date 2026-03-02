@@ -178,7 +178,7 @@ GameRenderer::~GameRenderer()
 }
 
 void GameRenderer::tick(bool first)		// 4J - add bFirst
-{
+{ 
 	tickFov();
 	tickLightTexture();		// 4J - change brought forward from 1.8.2
 	fogBrO = fogBr;
@@ -627,7 +627,7 @@ void GameRenderer::unZoomRegion()
 void GameRenderer::getFovAndAspect(float& fov, float& aspect, float a, bool applyEffects)
 {
 	// 4J - split out aspect ratio and fov here so we can adjust for viewports - we might need to revisit these as
-	// they are maybe be too generous for performance.
+	// they are maybe be too generous for performance. 
 	aspect = mc->width / (float) mc->height;
 	fov = getFov(a, applyEffects);
 
@@ -679,7 +679,7 @@ void GameRenderer::setupCamera(float a, int eye)
 
 	// 4J-PB - this is a per-player option
 	//if (mc->options->bobView) bobView(a);
-
+	
 	bool bNoLegAnim =(mc->player->getAnimOverrideBitmask()&(1<<HumanoidModel::eAnim_NoLegAnim))!=0;
 	bool bNoBobbingAnim =(mc->player->getAnimOverrideBitmask()&(1<<HumanoidModel::eAnim_NoBobbing))!=0;
 
@@ -770,7 +770,7 @@ void GameRenderer::renderItemInHand(float a, int eye)
 	//if (!mc->options->thirdPersonView && !mc->cameraTargetPlayer->isSleeping())
 	if (!localplayer->ThirdPersonView() && !mc->cameraTargetPlayer->isSleeping())
 	{
-		if (!mc->options->hideGui && !mc->gameMode->isCutScene())
+		if (!mc->options->hideGui && !mc->gameMode->isCutScene()) 
 		{
 			turnOnLightLayer(a);
 			PIXBeginNamedEvent(0,"Item in hand render");
@@ -795,7 +795,7 @@ void GameRenderer::renderItemInHand(float a, int eye)
 // 4J - change brought forward from 1.8.2
 void GameRenderer::turnOffLightLayer(double alpha)
 {	// 4J - TODO
-#if 0
+#if 0	
     if (SharedConstants::TEXTURE_LIGHTING)
 	{
         glClientActiveTexture(GL_TEXTURE1);
@@ -868,7 +868,7 @@ void GameRenderer::updateLightTexture(float a)
 		if (player == NULL) continue;
 
 		Level *level = player->level;		// 4J - was mc->level when it was just to update the one light texture
-
+		
 		float skyDarken1 = level->getSkyDarken((float) 1);
 		for (int i = 0; i < 256; i++)
 		{
@@ -1141,7 +1141,7 @@ int GameRenderer::runUpdate(LPVOID lpParam)
 	Vec3::CreateNewThreadStorage();
 	AABB::CreateNewThreadStorage();
 	IntCache::CreateNewThreadStorage();
-	Tesselator::CreateNewThreadStorage(1024*1024);
+	Tesselator::CreateNewThreadStorage(1024*1024);	
 	Compression::UseDefaultThreadStorage();
 	RenderManager.InitialiseContext();
 #ifdef _LARGE_WORLDS
@@ -1210,12 +1210,12 @@ int GameRenderer::runUpdate(LPVOID lpParam)
 		}
 		m_deleteStackSparseDataStorage.clear();
 		LeaveCriticalSection(&m_csDeleteStack);
-
+			
 //		PIXEndNamedEvent();
 
 		AABB::resetPool();
 		Vec3::resetPool();
-		IntCache::Reset();
+		IntCache::Reset();	
 		m_updateEvents->Set(eUpdateEventIsFinished);
 	}
 
@@ -1247,12 +1247,12 @@ void GameRenderer::DisableUpdateThread()
 	if( !updateRunning) return;
 	app.DebugPrintf("------------------DisableUpdateThread--------------------\n");
 	updateRunning = false;
-	m_updateEvents->Clear(eUpdateCanRun);
+	m_updateEvents->Clear(eUpdateCanRun);	
 	m_updateEvents->WaitForSingle(eUpdateEventIsFinished,INFINITE);
 #endif
 }
 
-void GameRenderer::renderLevel(float a, int64_t until)
+void GameRenderer::renderLevel(float a, __int64 until)
 {
 //	if (updateLightTexture) updateLightTexture();	// 4J - TODO - Java 1.0.1 has this line enabled, should check why - don't want to put it in now in case it breaks split-screen
 
@@ -1335,7 +1335,7 @@ void GameRenderer::renderLevel(float a, int64_t until)
 
 				if (until == 0) break;
 
-				int64_t diff = until - System::nanoTime();
+				__int64 diff = until - System::nanoTime();
 				if (diff < 0) break;
 				if (diff > 1000000000) break;
 			} while (true);
@@ -1594,7 +1594,7 @@ void GameRenderer::renderSnowAndRain(float a)
 
 	this->turnOnLightLayer(a);
 
-    if (rainXa == NULL)
+    if (rainXa == NULL) 
 	{
         rainXa = new float[32 * 32];
         rainZa = new float[32 * 32];
@@ -1657,7 +1657,7 @@ void GameRenderer::renderSnowAndRain(float a)
 	}
 
 	// 4J - some changes made here to access biome through new interface that caches results in levelchunk flags, as an optimisation
-
+	
     int mode = -1;
     float time = _tick + a;
 
@@ -1669,7 +1669,7 @@ void GameRenderer::renderSnowAndRain(float a)
             int rainSlot = (z - z0 + 16) * 32 + (x - x0 + 16);
             float xa = rainXa[rainSlot] * 0.5f;
             float za = rainZa[rainSlot] * 0.5f;
-
+			
 			// 4J - changes here brought forward from 1.8.2
 			Biome *b = level->getBiome(x, z);
 			if (!b->hasRain() && !b->hasSnow()) continue;
@@ -1715,9 +1715,9 @@ void GameRenderer::renderSnowAndRain(float a)
 					float Alpha = ((1 - dd * dd) * 0.5f + 0.5f) * rainLevel;
 					int tex2 = (level->getLightColor(x, yl, z, 0) * 3 + 0xf000f0) / 4;
 					t->tileRainQuad(x - xa + 0.5, yy0, z - za + 0.5, 0 * s, yy0 * s / 4.0f + ra * s,
-									x + xa + 0.5, yy0, z + za + 0.5, 1 * s, yy0 * s / 4.0f + ra * s,
-									x + xa + 0.5, yy1, z + za + 0.5, 1 * s, yy1 * s / 4.0f + ra * s,
-									x - xa + 0.5, yy1, z - za + 0.5, 0 * s, yy1 * s / 4.0f + ra * s,
+									x + xa + 0.5, yy0, z + za + 0.5, 1 * s, yy0 * s / 4.0f + ra * s, 
+									x + xa + 0.5, yy1, z + za + 0.5, 1 * s, yy1 * s / 4.0f + ra * s, 
+									x - xa + 0.5, yy1, z - za + 0.5, 0 * s, yy1 * s / 4.0f + ra * s, 
 									br, br, br, Alpha, br, br, br, 0, tex2);
 #else
                     t->tex2(level->getLightColor(x, yl, z, 0));
@@ -1753,9 +1753,9 @@ void GameRenderer::renderSnowAndRain(float a)
 					float Alpha = ((1 - dd * dd) * 0.3f + 0.5f) * rainLevel;
 					int tex2 = (level->getLightColor(x, yl, z, 0) * 3 + 0xf000f0) / 4;
 					t->tileRainQuad(x - xa + 0.5, yy0, z - za + 0.5, 0 * s + uo, yy0 * s / 4.0f + ra * s + vo,
-									x + xa + 0.5, yy0, z + za + 0.5, 1 * s + uo, yy0 * s / 4.0f + ra * s + vo,
-									x + xa + 0.5, yy1, z + za + 0.5, 1 * s + uo, yy1 * s / 4.0f + ra * s + vo,
-									x - xa + 0.5, yy1, z - za + 0.5, 0 * s + uo, yy1 * s / 4.0f + ra * s + vo,
+									x + xa + 0.5, yy0, z + za + 0.5, 1 * s + uo, yy0 * s / 4.0f + ra * s + vo, 
+									x + xa + 0.5, yy1, z + za + 0.5, 1 * s + uo, yy1 * s / 4.0f + ra * s + vo, 
+									x - xa + 0.5, yy1, z - za + 0.5, 0 * s + uo, yy1 * s / 4.0f + ra * s + vo, 
 									br, br, br, Alpha, br, br, br, Alpha, tex2);
 #else
                     t->tex2((level->getLightColor(x, yl, z, 0) * 3 + 0xf000f0) / 4);
@@ -1861,7 +1861,7 @@ void GameRenderer::setupClearColor(float a)
 	}
 	else if (t != 0 && Tile::tiles[t]->material == Material::water)
 	{
-
+		
 		unsigned int colour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_Under_Water_Clear_Colour );
 		byte redComponent = ((colour>>16)&0xFF);
 		byte greenComponent = ((colour>>8)&0xFF);
@@ -1873,7 +1873,7 @@ void GameRenderer::setupClearColor(float a)
 	}
 	else if (t != 0 && Tile::tiles[t]->material == Material::lava)
 	{
-
+		
 		unsigned int colour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_Under_Lava_Clear_Colour );
 		byte redComponent = ((colour>>16)&0xFF);
 		byte greenComponent = ((colour>>8)&0xFF);
@@ -2017,7 +2017,7 @@ void GameRenderer::setupFog(int i, float alpha)
 	{
 		glFogi(GL_FOG_MODE, GL_EXP);
 		glFogf(GL_FOG_DENSITY, 0.1f); // was 0.06
-
+		
 		unsigned int colour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_In_Cloud_Fog_Colour );
 		byte redComponent = ((colour>>16)&0xFF);
 		byte greenComponent = ((colour>>8)&0xFF);
@@ -2049,7 +2049,7 @@ void GameRenderer::setupFog(int i, float alpha)
 		{
 			glFogf(GL_FOG_DENSITY, 0.1f); // was 0.06
 		}
-
+		
 		unsigned int colour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_Under_Water_Fog_Colour );
 		byte redComponent = ((colour>>16)&0xFF);
 		byte greenComponent = ((colour>>8)&0xFF);
@@ -2074,7 +2074,7 @@ void GameRenderer::setupFog(int i, float alpha)
 	{
 		glFogi(GL_FOG_MODE, GL_EXP);
 		glFogf(GL_FOG_DENSITY, 2.0f); // was 0.06
-
+		
 		unsigned int colour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_Under_Lava_Fog_Colour );
 		byte redComponent = ((colour>>16)&0xFF);
 		byte greenComponent = ((colour>>8)&0xFF);

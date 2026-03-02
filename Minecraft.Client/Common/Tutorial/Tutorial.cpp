@@ -41,7 +41,7 @@ bool Tutorial::PopupMessageDetails::isSameContent(PopupMessageDetails *other)
 
 void Tutorial::staticCtor()
 {
-	//
+	// 
 	/*
 	*****
 	*****
@@ -72,7 +72,7 @@ void Tutorial::staticCtor()
 	s_completableTasks.push_back( e_Tutorial_State_Enchanting );
 
 	s_completableTasks.push_back( e_Tutorial_Hint_Hold_To_Mine );
-	s_completableTasks.push_back( e_Tutorial_Hint_Tool_Damaged );
+	s_completableTasks.push_back( e_Tutorial_Hint_Tool_Damaged );	
 	s_completableTasks.push_back( e_Tutorial_Hint_Swim_Up );
 
 	s_completableTasks.push_back( e_Tutorial_Hint_Unused_2 );
@@ -164,7 +164,7 @@ void Tutorial::staticCtor()
 	s_completableTasks.push_back( e_Tutorial_Hint_Thin_Glass );
 	s_completableTasks.push_back( e_Tutorial_Hint_Melon );
 	s_completableTasks.push_back( e_Tutorial_Hint_Vine );
-	s_completableTasks.push_back( e_Tutorial_Hint_Fence_Gate );
+	s_completableTasks.push_back( e_Tutorial_Hint_Fence_Gate );	
 	s_completableTasks.push_back( e_Tutorial_Hint_Mycel );
 	s_completableTasks.push_back( e_Tutorial_Hint_Water_Lily );
 	s_completableTasks.push_back( e_Tutorial_Hint_Nether_Brick );
@@ -448,7 +448,7 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	if(!isHintCompleted(e_Tutorial_Hint_Detector_Rail)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Detector_Rail, this, detectorRailItems, 1 ) );
 
 	int tallGrassItems[] = {Tile::tallgrass_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Tall_Grass))
+	if(!isHintCompleted(e_Tutorial_Hint_Tall_Grass)) 
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Tall_Grass, this, tallGrassItems, 1, -1, TallGrass::DEAD_SHRUB ) );
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Tall_Grass, this, tallGrassItems, 1, -1, TallGrass::TALL_GRASS ) );
@@ -731,7 +731,7 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 
 	int potatoItems[] = {Tile::potatoes_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Potato)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Potato, this, potatoItems, 1, -1, -1, 7 ) );
-
+	
 	int carrotItems[] = {Tile::carrots_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Carrot)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Carrot, this, carrotItems, 1, -1, -1, 7 ) );
 
@@ -1208,7 +1208,7 @@ void Tutorial::tick()
 	}
 	else if(m_freezeTime && m_timeFrozen && m_fullTutorialComplete)
 	{
-		int64_t currentTime = pMinecraft->level->getTime();
+		__int64 currentTime = pMinecraft->level->getTime();
 		int currentDayTime = (currentTime % Level::TICKS_PER_DAY);
 		int timeToAdd = 0;
 		if(currentDayTime > m_iTutorialFreezeTimeValue)
@@ -1219,7 +1219,7 @@ void Tutorial::tick()
 		{
 			timeToAdd = m_iTutorialFreezeTimeValue - currentDayTime;
 		}
-		int64_t targetTime = currentTime + timeToAdd;
+		__int64 targetTime = currentTime + timeToAdd;
 		MinecraftServer::SetTimeOfDay(-1);
 		MinecraftServer::SetTime(targetTime);
 		pMinecraft->level->setOverrideTimeOfDay(-1);
@@ -1228,7 +1228,7 @@ void Tutorial::tick()
 	}
 
 	if(!m_allowShow)
-	{
+	{		
 		if( currentTask[m_CurrentState] != NULL && (!currentTask[m_CurrentState]->AllowFade() || (lastMessageTime + m_iTutorialDisplayMessageTime ) > GetTickCount() ) )
 		{
 			uiTempDisabled = true;
@@ -1264,7 +1264,7 @@ void Tutorial::tick()
 			app.TutorialSceneNavigateBack(m_iPad);
 			m_bSceneIsSplitscreen=app.GetLocalPlayerCount()>1;
 			if(m_bSceneIsSplitscreen)
-			{
+			{				
 				app.NavigateToScene(m_iPad, eUIComponent_TutorialPopup,(void *)this, false, false, &m_hTutorialScene);
 			}
 			else
@@ -1359,7 +1359,7 @@ void Tutorial::tick()
 			{
 				isCurrentTask = false;
 				if(
-					( !task->ShowMinimumTime() || ( task->hasBeenActivated() && (lastMessageTime + m_iTutorialMinimumDisplayMessageTime ) < GetTickCount() ) )
+					( !task->ShowMinimumTime() || ( task->hasBeenActivated() && (lastMessageTime + m_iTutorialMinimumDisplayMessageTime ) < GetTickCount() ) ) 
 					&& task->isCompleted()
 					)
 				{
@@ -1503,7 +1503,7 @@ void Tutorial::tick()
 			message->m_promptId = currentTask[m_CurrentState]->getPromptId();
 			message->m_allowFade = currentTask[m_CurrentState]->AllowFade();
 			setMessage( message );
-			currentTask[m_CurrentState]->TaskReminders()? m_iTaskReminders = 1 : m_iTaskReminders = 0;
+			currentTask[m_CurrentState]->TaskReminders()? m_iTaskReminders = 1 : m_iTaskReminders = 0;			
 		}
 		else
 		{
@@ -1636,7 +1636,7 @@ bool Tutorial::setMessage(TutorialHint *hint, PopupMessageDetails *message)
 	bool messageShown = false;
 	DWORD time = GetTickCount();
 	if(message != NULL && (message->m_forceDisplay || hintsOn) &&
-		(!message->m_delay ||
+		(!message->m_delay || 
 		(
 		(m_hintDisplayed && (time - m_lastHintDisplayedTime) > m_iTutorialHintDelayTime ) ||
 		(!m_hintDisplayed && (time - lastMessageTime) > m_iTutorialMinimumDisplayMessageTime )
@@ -1648,7 +1648,7 @@ bool Tutorial::setMessage(TutorialHint *hint, PopupMessageDetails *message)
 
 		if(messageShown)
 		{
-			m_lastHintDisplayedTime = time;
+			m_lastHintDisplayedTime = time;		
 			m_hintDisplayed = true;
 			if(hint!=NULL) setHintCompleted( hint );
 		}
@@ -1672,7 +1672,7 @@ void Tutorial::showTutorialPopup(bool show)
 	m_allowShow = show;
 
 	if(!show)
-	{
+	{		
 		if( currentTask[m_CurrentState] != NULL && (!currentTask[m_CurrentState]->AllowFade() || (lastMessageTime + m_iTutorialDisplayMessageTime ) > GetTickCount() ) )
 		{
 			uiTempDisabled = true;
@@ -2099,7 +2099,7 @@ void Tutorial::changeTutorialState(eTutorial_State newState, UIScene *scene /*= 
 		// The action that caused the change of state may also have completed the current task
 		if( currentTask[m_CurrentState] != NULL && currentTask[m_CurrentState]->isCompleted() )
 		{
-			activeTasks[m_CurrentState].erase( find( activeTasks[m_CurrentState].begin(), activeTasks[m_CurrentState].end(), currentTask[m_CurrentState]) );
+			activeTasks[m_CurrentState].erase( find( activeTasks[m_CurrentState].begin(), activeTasks[m_CurrentState].end(), currentTask[m_CurrentState]) );					
 
 			if( activeTasks[m_CurrentState].size() > 0 )
 			{

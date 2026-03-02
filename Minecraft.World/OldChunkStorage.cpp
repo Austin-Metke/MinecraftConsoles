@@ -103,7 +103,7 @@ File OldChunkStorage::getFile(int x, int z)
 	file = File( file, wstring( name ) );
 	if ( !file.exists() )
 	{
-		if (!create)
+		if (!create) 
 		{
 			return File(L"");
 		}
@@ -163,7 +163,7 @@ void OldChunkStorage::save(Level *level, LevelChunk *levelChunk)
 	{
 		LevelData *levelData = level->getLevelData();
 		levelData->setSizeOnDisk( levelData->getSizeOnDisk() - file.length() );
-	}
+	} 
 
 	// 4J - removed try/catch
 	//    try {
@@ -202,7 +202,7 @@ bool OldChunkStorage::saveEntities(LevelChunk *lc, Level *level, CompoundTag *ta
 
 	lc->lastSaveHadEntities = false;
 	ListTag<CompoundTag> *entityTags = new ListTag<CompoundTag>();
-
+	
 #ifdef _ENTITIES_RW_SECTION
 	EnterCriticalRWSection(&lc->m_csEntities, true);
 #else
@@ -263,7 +263,7 @@ void OldChunkStorage::save(LevelChunk *lc, Level *level, DataOutputStream *dos)
 #ifndef SPLIT_SAVES
 	saveEntities(lc, level, tag);
 #endif
-
+	
 	PIXBeginNamedEvent(0,"Saving tile entities");
 	ListTag<CompoundTag> *tileEntityTags = new ListTag<CompoundTag>();
 
@@ -283,7 +283,7 @@ void OldChunkStorage::save(LevelChunk *lc, Level *level, DataOutputStream *dos)
 	vector<TickNextTickData > *ticksInChunk = level->fetchTicksInChunk(lc, false);
 	if (ticksInChunk != NULL)
 	{
-		int64_t levelTime = level->getTime();
+		__int64 levelTime = level->getTime();
 
 		ListTag<CompoundTag> *tickTags = new ListTag<CompoundTag>();
 		for( int i = 0; i < ticksInChunk->size(); i++ )
@@ -372,7 +372,7 @@ void OldChunkStorage::save(LevelChunk *lc, Level *level, CompoundTag *tag)
 	vector<TickNextTickData > *ticksInChunk = level->fetchTicksInChunk(lc, false);
 	if (ticksInChunk != NULL)
 	{
-		int64_t levelTime = level->getTime();
+		__int64 levelTime = level->getTime();
 
 		ListTag<CompoundTag> *tickTags = new ListTag<CompoundTag>();
 		for( int i = 0; i < ticksInChunk->size(); i++ )
@@ -442,7 +442,7 @@ LevelChunk *OldChunkStorage::load(Level *level, DataInputStream *dis)
 
 	dis->readFully(levelChunk->heightmap);
 
-	levelChunk->terrainPopulated = dis->readShort();
+	levelChunk->terrainPopulated = dis->readShort();	
 	// If all neighbours have been post-processed, then we should have done the post-post-processing now. Check that this is set as if it isn't then we won't be able
 	// to send network data for chunks, and we won't ever try and set it again as all the directional flags are now already set - should only be an issue for old maps
 	// before this flag was added.
@@ -512,13 +512,13 @@ LevelChunk *OldChunkStorage::load(Level *level, CompoundTag *tag)
 	if( tag->get(L"TerrainPopulated") )
 	{
 		// Java bool type or byte bitfield
-		levelChunk->terrainPopulated = tag->getByte(L"TerrainPopulated");
+		levelChunk->terrainPopulated = tag->getByte(L"TerrainPopulated");		
 		if( levelChunk->terrainPopulated >= 1 ) levelChunk->terrainPopulated = LevelChunk::sTerrainPopulatedAllNeighbours | LevelChunk::sTerrainPostPostProcessed;	// Convert from old bool type to new bitfield
 	}
 	else
 	{
 		// New style short
-		levelChunk->terrainPopulated = tag->getShort(L"TerrainPopulatedFlags");
+		levelChunk->terrainPopulated = tag->getShort(L"TerrainPopulatedFlags");	
 		// If all neighbours have been post-processed, then we should have done the post-post-processing now. Check that this is set as if it isn't then we won't be able
 		// to send network data for chunks, and we won't ever try and set it again as all the directional flags are now already set - should only be an issue for old maps
 		// before this flag was added.

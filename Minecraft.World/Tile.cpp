@@ -16,14 +16,14 @@
 #include "net.minecraft.h"
 #include "Tile.h"
 
-wstring Tile::TILE_DESCRIPTION_PREFIX = L"Tile.";
+wstring Tile::TILE_DESCRIPTION_PREFIX = L"Tile."; 
 
 const float Tile::INDESTRUCTIBLE_DESTROY_TIME = -1.0f;
 
 Tile::SoundType *Tile::SOUND_NORMAL = NULL;
 Tile::SoundType *Tile::SOUND_WOOD = NULL;
 Tile::SoundType *Tile::SOUND_GRAVEL = NULL;
-Tile::SoundType *Tile::SOUND_GRASS = NULL;
+Tile::SoundType *Tile::SOUND_GRASS = NULL; 
 Tile::SoundType *Tile::SOUND_STONE = NULL;
 Tile::SoundType *Tile::SOUND_METAL = NULL;
 Tile::SoundType *Tile::SOUND_GLASS = NULL;
@@ -185,7 +185,7 @@ Tile *Tile::enderChest = NULL;
 TripWireSourceTile *Tile::tripWireSource = NULL;
 Tile *Tile::tripWire = NULL;
 Tile *Tile::emeraldBlock = NULL;
-
+ 
 
 Tile *Tile::cocoa = NULL;
 Tile *Tile::skull = NULL;
@@ -273,7 +273,7 @@ void Tile::staticCtor()
 	Tile::sponge = (new Sponge(19))								->setDestroyTime(0.6f)->setSoundType(Tile::SOUND_GRASS)->setTextureName(L"sponge")->setDescriptionId(IDS_TILE_SPONGE)->setUseDescriptionId(IDS_DESC_SPONGE);
 	Tile::glass = (new GlassTile(20, Material::glass, false))	->setDestroyTime(0.3f)->setSoundType(Tile::SOUND_GLASS)->setTextureName(L"glass")->setDescriptionId(IDS_TILE_GLASS)->setUseDescriptionId(IDS_DESC_GLASS);
 	Tile::dispenser = (new DispenserTile(23))					->setDestroyTime(3.5f)->setSoundType(Tile::SOUND_STONE)->setTextureName(L"dispenser")->setDescriptionId(IDS_TILE_DISPENSER)->sendTileData()->setUseDescriptionId(IDS_DESC_DISPENSER);
-
+	
 	//Tile::wood = (new Tile(5, 4, Material::wood))			->setBaseItemTypeAndMaterial(Item::eBaseItemType_structwoodstuff,	Item::eMaterial_wood)->setDestroyTime(2.0f)->setExplodeable(5)->setSoundType(Tile::SOUND_WOOD)->setDescriptionId(IDS_TILE_WOOD)->sendTileData()->setUseDescriptionId(IDS_DESC_WOODENPLANKS);
 	Tile::wood = (new WoodTile(5))							->setBaseItemTypeAndMaterial(Item::eBaseItemType_structwoodstuff,	Item::eMaterial_wood)->setDestroyTime(2.0f)->setExplodeable(5)->setSoundType(Tile::SOUND_WOOD)->setTextureName(L"wood")->setDescriptionId(IDS_TILE_OAKWOOD_PLANKS)->sendTileData()->setUseDescriptionId(IDS_DESC_WOODENPLANKS);
 	Tile::sandStone = (new SandStoneTile(24))				->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock,	Item::eMaterial_sand)->setSoundType(Tile::SOUND_STONE)->setDestroyTime(0.8f)->sendTileData()->setTextureName(L"sandStone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE)->sendTileData();
@@ -281,7 +281,7 @@ void Tile::staticCtor()
 	Tile::redBrick = (new Tile(45, Material::stone))		->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock,	Item::eMaterial_brick)->setDestroyTime(2.0f)->setExplodeable(10)->setSoundType(Tile::SOUND_STONE)->setTextureName(L"brick")->setDescriptionId(IDS_TILE_BRICK)->setUseDescriptionId(IDS_DESC_BRICK);
 	Tile::clay = (new ClayTile(82))							->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock,	Item::eMaterial_clay)->setDestroyTime(0.6f)->setSoundType(Tile::SOUND_GRAVEL)->setTextureName(L"clay")->setDescriptionId(IDS_TILE_CLAY)->setUseDescriptionId(IDS_DESC_CLAY_TILE);
 	Tile::snow = (new SnowTile(80))							->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock,	Item::eMaterial_snow)->setDestroyTime(0.2f)->setSoundType(Tile::SOUND_CLOTH)->setTextureName(L"snow")->setDescriptionId(IDS_TILE_SNOW)->setUseDescriptionId(IDS_DESC_SNOW);
-
+	
 	Tile::torch = (new TorchTile(50))							->setBaseItemTypeAndMaterial(Item::eBaseItemType_torch,	Item::eMaterial_wood)->setDestroyTime(0.0f)->setLightEmission(15 / 16.0f)->setSoundType(Tile::SOUND_WOOD)->setTextureName(L"torch")->setDescriptionId(IDS_TILE_TORCH)->sendTileData()->setUseDescriptionId(IDS_DESC_TORCH)->disableMipmap();
 	Tile::litPumpkin = (new PumpkinTile(91, true))				->setBaseItemTypeAndMaterial(Item::eBaseItemType_torch,	Item::eMaterial_pumpkin)->setDestroyTime(1.0f)->setSoundType(Tile::SOUND_WOOD)->setLightEmission(1.0f)->setTextureName(L"litpumpkin")->setDescriptionId(IDS_TILE_LIT_PUMPKIN)->sendTileData()->setUseDescriptionId(IDS_DESC_JACKOLANTERN);
 	Tile::lightGem = (new LightGemTile(89, Material::glass))	->setBaseItemTypeAndMaterial(Item::eBaseItemType_torch,	Item::eMaterial_glowstone)->setDestroyTime(0.3f)->setSoundType(Tile::SOUND_GLASS)->setLightEmission(1.0f)->setTextureName(L"lightgem")->setDescriptionId(IDS_TILE_LIGHT_GEM)->setUseDescriptionId(IDS_DESC_GLOWSTONE);
@@ -310,17 +310,17 @@ void Tile::staticCtor()
 // 	Tile::stoneSlab = (new StoneSlabTile(43, true))			->setBaseItemTypeAndMaterial(Item::eBaseItemType_slab,	Item::eMaterial_stone)->setDestroyTime(2.0f)->setExplodeable(10)->setSoundType(Tile::SOUND_STONE)->setDescriptionId(IDS_TILE_STONESLAB)->setUseDescriptionId(IDS_DESC_SLAB);
 // 	Tile::stoneSlabHalf = (new StoneSlabTile(44, false))	->setBaseItemTypeAndMaterial(Item::eBaseItemType_halfslab,	Item::eMaterial_stone)->setDestroyTime(2.0f)->setExplodeable(10)->setSoundType(Tile::SOUND_STONE)->setDescriptionId(IDS_TILE_STONESLAB)->setUseDescriptionId(IDS_DESC_HALFSLAB);
 
-
+	
 	Tile::tnt = (new TntTile(46))						->setDestroyTime(0.0f)->setSoundType(Tile::SOUND_GRASS)->setTextureName(L"tnt")->setDescriptionId(IDS_TILE_TNT)->setUseDescriptionId(IDS_DESC_TNT);
 	Tile::bookshelf = (new BookshelfTile(47))			->setDestroyTime(1.5f)->setSoundType(Tile::SOUND_WOOD)->setTextureName(L"bookshelf")->setDescriptionId(IDS_TILE_BOOKSHELF)->setUseDescriptionId(IDS_DESC_BOOKSHELF);
 	Tile::mossStone = (new Tile(48, Material::stone))	->setDestroyTime(2.0f)->setExplodeable(10)->setSoundType(Tile::SOUND_STONE)->setTextureName(L"stoneMoss")->setDescriptionId(IDS_TILE_STONE_MOSS)->setUseDescriptionId(IDS_DESC_MOSS_STONE);
 	// 4J - change of destroy time from 10.0f -> 50.0f for obsidian brought forward from 1.2.3
 	Tile::obsidian = (new ObsidianTile(49))				->setDestroyTime(50.0f)->setExplodeable(2000)->setSoundType(Tile::SOUND_STONE)->setTextureName(L"obsidian")->setDescriptionId(IDS_TILE_OBSIDIAN)->setUseDescriptionId(IDS_DESC_OBSIDIAN);
-
+	
 
 	Tile::fire = (FireTile *) ((new FireTile(51))				->setDestroyTime(0.0f)->setLightEmission(1.0f)->setSoundType(Tile::SOUND_WOOD))->setTextureName(L"fire")->setDescriptionId(IDS_TILE_FIRE)->setNotCollectStatistics()->setUseDescriptionId(-1);
 	Tile::mobSpawner = (new MobSpawnerTile(52))					->setDestroyTime(5.0f)->setSoundType(Tile::SOUND_METAL)->setTextureName(L"mobSpawner")->setDescriptionId(IDS_TILE_MOB_SPAWNER)->setNotCollectStatistics()->setUseDescriptionId(IDS_DESC_MOB_SPAWNER);
-
+	
 	Tile::chest = (ChestTile *)(new ChestTile(54))				->setBaseItemTypeAndMaterial(Item::eBaseItemType_chest,	Item::eMaterial_ender)->setDestroyTime(2.5f)->setSoundType(Tile::SOUND_WOOD)->setTextureName(L"chest")->setDescriptionId(IDS_TILE_CHEST)->sendTileData()->setUseDescriptionId(IDS_DESC_CHEST);
 	Tile::redStoneDust = (RedStoneDustTile *)(new RedStoneDustTile(55))				->setDestroyTime(0.0f)->setSoundType(Tile::SOUND_NORMAL)->setTextureName(L"redstoneDust")->setDescriptionId(IDS_TILE_REDSTONE_DUST)->setNotCollectStatistics()->sendTileData()->setUseDescriptionId(IDS_DESC_REDSTONE_DUST);
 	Tile::workBench = (new WorkbenchTile(58))					->setBaseItemTypeAndMaterial(Item::eBaseItemType_device,	Item::eMaterial_wood)->setDestroyTime(2.5f)->setSoundType(Tile::SOUND_WOOD)->setTextureName(L"workbench")->setDescriptionId(IDS_TILE_WORKBENCH)->setUseDescriptionId(IDS_DESC_CRAFTINGTABLE);
@@ -409,7 +409,7 @@ void Tile::staticCtor()
 	Tile::tripWireSource =	(TripWireSourceTile *)( new TripWireSourceTile(131) )	->setTextureName(L"tripWireSource")->sendTileData()->setDescriptionId(IDS_TILE_TRIPWIRE_SOURCE)->setUseDescriptionId(IDS_DESC_TRIPWIRE_SOURCE);
 	Tile::tripWire =		(new TripWireTile(132))									->setTextureName(L"tripWire")->sendTileData()->setDescriptionId(IDS_TILE_TRIPWIRE)->setUseDescriptionId(IDS_DESC_TRIPWIRE);
 	Tile::emeraldBlock =	(new MetalTile(133))									->setBaseItemTypeAndMaterial(Item::eBaseItemType_block,	Item::eMaterial_emerald)->setDestroyTime(5.0f)->setExplodeable(10)->setSoundType(SOUND_METAL)->setTextureName(L"blockEmerald")->setDescriptionId(IDS_TILE_EMERALDBLOCK)->setUseDescriptionId(IDS_DESC_EMERALDBLOCK);
-
+    
 
 	Tile::cocoa =			(new CocoaTile(127))		->setDestroyTime(0.2f)->setExplodeable(5)->setSoundType(SOUND_WOOD)->setTextureName(L"cocoa")->sendTileData()->setDescriptionId(IDS_TILE_COCOA)->setUseDescriptionId(IDS_DESC_COCOA);
 	Tile::skull =			(new SkullTile(144))		->setDestroyTime(1.0f)->setSoundType(SOUND_STONE)->setTextureName(L"skull")->setDescriptionId(IDS_TILE_SKULL)->setUseDescriptionId(IDS_DESC_SKULL);
@@ -658,7 +658,7 @@ void Tile::setShape(float x0, float y0, float z0, float x1, float y1, float z1)
 	tls->yy1 = y1;
 	tls->zz1 = z1;
 	tls->tileId = this->id;
-
+	
 	//this->xx0 = x0;
 	//this->yy0 = y0;
 	//this->zz0 = z0;
@@ -798,7 +798,7 @@ AABB *Tile::getTileAABB(Level *level, int x, int y, int z)
 	return AABB::newTemp(x + tls->xx0, y + tls->yy0, z + tls->zz0, x + tls->xx1, y + tls->yy1, z + tls->zz1);
 }
 
-void Tile::addAABBs(Level *level, int x, int y, int z, AABB *box, AABBList *boxes, shared_ptr<Entity> source)
+void Tile::addAABBs(Level *level, int x, int y, int z, AABB *box, AABBList *boxes, shared_ptr<Entity> source) 
 {
 	AABB *aabb = getAABB(level, x, y, z);
 	if (aabb != NULL && box->intersects(aabb)) boxes->push_back(aabb);
@@ -977,7 +977,7 @@ HitResult *Tile::clip(Level *level, int xt, int yt, int zt, Vec3 *a, Vec3 *b)
 bool Tile::containsX(Vec3 *v)
 {
 	if( v == NULL) return false;
-
+	
 	ThreadStorage *tls = (ThreadStorage *)TlsGetValue(Tile::tlsIdxShape);
 	// 4J Stu - Added this so that the TLS shape is correct for this tile
 	if(tls->tileId != this->id) updateDefaultShape();
@@ -1333,7 +1333,7 @@ void Tile::handleRain(Level *level, int x, int y, int z)
 {
 }
 
- void Tile::levelTimeChanged(Level *level, int64_t delta, int64_t newTime)
+ void Tile::levelTimeChanged(Level *level, __int64 delta, __int64 newTime)
 {
 }
 
@@ -1454,26 +1454,26 @@ Tile::SoundType::SoundType(eMATERIALSOUND_TYPE eMaterialSound, float volume, flo
 }
 
 float Tile::SoundType::getVolume() const
-{
-	return volume;
+{ 
+	return volume; 
 }
 float Tile::SoundType::getPitch() const
-{
-	return pitch;
+{ 
+	return pitch; 
 }
 //wstring getBreakSound() const { return breakSound; }
 //wstring getStepSound()	const { return stepSound; }
 int Tile::SoundType::getBreakSound() const
-{
-	return iBreakSound;
+{ 
+	return iBreakSound; 
 }
 int Tile::SoundType::getStepSound()	const
-{
-	return iStepSound;
+{ 
+	return iStepSound; 
 }
 int Tile::SoundType::getPlaceSound() const
-{
-	return iPlaceSound;
+{ 
+	return iPlaceSound; 
 }
 
 

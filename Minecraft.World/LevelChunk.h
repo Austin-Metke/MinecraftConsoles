@@ -102,13 +102,13 @@ public:
 
     unordered_map<TilePos, shared_ptr<TileEntity>, TilePosKeyHash, TilePosKeyEq> tileEntities;
     vector<shared_ptr<Entity> > **entityBlocks;
-
+	
 	static const int sTerrainPopulatedFromHere		= 2;
 	static const int sTerrainPopulatedFromW			= 4;
 	static const int sTerrainPopulatedFromS			= 8;
 	static const int sTerrainPopulatedFromSW		= 16;
 	static const int sTerrainPopulatedAllAffecting	= 30;			// All the post-processing that can actually place tiles in this chunk are complete
-	static const int sTerrainPopulatedFromNW		= 32;
+	static const int sTerrainPopulatedFromNW		= 32;		
 	static const int sTerrainPopulatedFromN			= 64;
 	static const int sTerrainPopulatedFromNE		= 128;
 	static const int sTerrainPopulatedFromE			= 256;
@@ -134,8 +134,8 @@ public:
 	void stopSharingTilesAndData();					// 4J added
 	virtual void reSyncLighting();					// 4J added
 	void startSharingTilesAndData(int forceMs = 0);	// 4J added
-	int64_t lastUnsharedTime;						// 4J added
-    int64_t lastSaveTime;
+	__int64 lastUnsharedTime;						// 4J added
+    __int64 lastSaveTime;
 	bool seenByPlayer;
 
 #ifdef _LARGE_WORLDS
@@ -213,7 +213,7 @@ public:
 	virtual bool testSetBlocksAndData(byteArray data, int x0, int y0, int z0, int x1, int y1, int z1, int p);	// 4J added
 	virtual void setCheckAllLight();
 
-    virtual Random *getRandom(int64_t l);
+    virtual Random *getRandom(__int64 l);
     virtual bool isEmpty();
     virtual void attemptCompression();
 
@@ -238,9 +238,9 @@ public:
 	byteArray getBiomes();
 	void setBiomes(byteArray biomes);
 	bool biomeHasRain(int x, int z);	// 4J added
-	bool biomeHasSnow(int x, int z);	// 4J added
+	bool biomeHasSnow(int x, int z);	// 4J added	
 private:
-	void updateBiomeFlags(int x, int z);	// 4J added
+	void updateBiomeFlags(int x, int z);	// 4J added	
 public:
 	void compressLighting();		// 4J added
 	void compressBlocks();			// 4J added

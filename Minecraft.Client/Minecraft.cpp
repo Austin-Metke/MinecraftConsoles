@@ -77,15 +77,15 @@
 //#define DEBUG_RENDER_SHOWS_PACKETS 1
 //#define SPLITSCREEN_TEST
 
-// If not disabled, this creates an event queue on a seperate thread so that the Level::tick calls can be offloaded
+// If not disabled, this creates an event queue on a seperate thread so that the Level::tick calls can be offloaded 
 // from the main thread, and have longer to run, since it's called at 20Hz instead of 60
 #define DISABLE_LEVELTICK_THREAD
 
 Minecraft *Minecraft::m_instance = NULL;
-int64_t Minecraft::frameTimes[512];
-int64_t Minecraft::tickTimes[512];
+__int64 Minecraft::frameTimes[512];
+__int64 Minecraft::tickTimes[512];
 int Minecraft::frameTimePos = 0;
-int64_t Minecraft::warezTime = 0;
+__int64 Minecraft::warezTime = 0;
 File Minecraft::workDir = File(L"");
 
 #ifdef __PSVITA__
@@ -94,7 +94,7 @@ TOUCHSCREENRECT QuickSelectRect[3]=
 {
 	{ 560, 890, 1360, 980 },
 	{ 450, 840, 1449, 960 },
-	{ 320, 840, 1600, 970 },
+	{ 320, 840, 1600, 970 },		
 };
 
 int QuickSelectBoxWidth[3]=
@@ -680,7 +680,7 @@ void Minecraft::run()
 		return;
 	}
 
-	int64_t lastTime = System::currentTimeMillis();
+	__int64 lastTime = System::currentTimeMillis();
 	int frames = 0;
 
 	while (running)
@@ -705,7 +705,7 @@ void Minecraft::run()
 			timer->advanceTime();
 		}
 
-		int64_t beforeTickTime = System::nanoTime();
+		__int64 beforeTickTime = System::nanoTime();
 		for (int i = 0; i < timer->ticks; i++)
 		{
 			ticks++;
@@ -717,7 +717,7 @@ void Minecraft::run()
 			//                setScreen(new LevelConflictScreen());
 			//            }
 		}
-		int64_t tickDuraction = System::nanoTime() - beforeTickTime;
+		__int64 tickDuraction = System::nanoTime() - beforeTickTime;
 		checkGlError(L"Pre render");
 
 		TileRenderer::fancy = options->fancyGraphics;
@@ -1272,7 +1272,7 @@ void Minecraft::applyFrameMouseLook()
 
 void Minecraft::run_middle()
 {
-	static int64_t lastTime = 0;
+	static __int64 lastTime = 0;
 	static bool bFirstTimeIntoGame = true;
 	static bool bAutosaveTimerSet=false;
 	static unsigned int uiAutosaveTimer=0;
@@ -1332,7 +1332,7 @@ void Minecraft::run_middle()
 								if( pDLCPack )
 								{
 									if(!pDLCPack->hasPurchasedFile( DLCManager::e_DLCType_Texture, L"" ))
-									{
+									{			
 										bTrialTexturepack=true;
 									}
 								}
@@ -1454,7 +1454,7 @@ void Minecraft::run_middle()
 				{
 					delete m_pPsPlusUpsell;
 					m_pPsPlusUpsell = NULL;
-
+								
 					if ( ProfileManager.HasPlayStationPlus(i) )
 					{
 						app.DebugPrintf("<Minecraft.cpp> Player_%i is now authorised for PsPlus.\n", i);
@@ -1796,7 +1796,7 @@ void Minecraft::run_middle()
 				timer->advanceTime();
 			}
 
-			//int64_t beforeTickTime = System::nanoTime();
+			//__int64 beforeTickTime = System::nanoTime();
 			for (int i = 0; i < timer->ticks; i++)
 			{
 				bool bLastTimerTick = ( i == ( timer->ticks - 1 ) );
@@ -1882,7 +1882,7 @@ void Minecraft::run_middle()
 // 				CompressedTileStorage::tick();	// 4J added
 // 				SparseDataStorage::tick();		// 4J added
 			}
-			//int64_t tickDuraction = System::nanoTime() - beforeTickTime;
+			//__int64 tickDuraction = System::nanoTime() - beforeTickTime;
 			MemSect(31);
 			checkGlError(L"Pre render");
 			MemSect(0);
@@ -2084,14 +2084,14 @@ void Minecraft::emergencySave()
 	setLevel(NULL);
 }
 
-void Minecraft::renderFpsMeter(int64_t tickTime)
+void Minecraft::renderFpsMeter(__int64 tickTime)
 {
 	int nsPer60Fps = 1000000000l / 60;
 	if (lastTimer == -1)
 	{
 		lastTimer = System::nanoTime();
 	}
-	int64_t now = System::nanoTime();
+	__int64 now = System::nanoTime();
 	Minecraft::tickTimes[(Minecraft::frameTimePos) & (Minecraft::frameTimes_length - 1)] = tickTime;
 	Minecraft::frameTimes[(Minecraft::frameTimePos++) & (Minecraft::frameTimes_length - 1)] = now - lastTimer;
 	lastTimer = now;
@@ -2123,7 +2123,7 @@ void Minecraft::renderFpsMeter(int64_t tickTime)
 	t->vertex((float)(Minecraft::frameTimes_length), (float)( height - hh1 * 2), (float)( 0));
 
 	t->end();
-	int64_t totalTime = 0;
+	__int64 totalTime = 0;
 	for (int i = 0; i < Minecraft::frameTimes_length; i++)
 	{
 		totalTime += Minecraft::frameTimes[i];
@@ -2153,8 +2153,8 @@ void Minecraft::renderFpsMeter(int64_t tickTime)
 			t->color(0xff000000 + cc * 256);
 		}
 
-		int64_t time = Minecraft::frameTimes[i] / 200000;
-		int64_t time2 = Minecraft::tickTimes[i] / 200000;
+		__int64 time = Minecraft::frameTimes[i] / 200000;
+		__int64 time2 = Minecraft::tickTimes[i] / 200000;
 
 		t->vertex((float)(i + 0.5f), (float)( height - time + 0.5f), (float)( 0));
 		t->vertex((float)(i + 0.5f), (float)( height + 0.5f), (float)( 0));
@@ -2234,7 +2234,7 @@ void Minecraft::levelTickThreadInitFunc()
 {
 	AABB::CreateNewThreadStorage();
 	Vec3::CreateNewThreadStorage();
-	IntCache::CreateNewThreadStorage();
+	IntCache::CreateNewThreadStorage();	
 	Compression::UseDefaultThreadStorage();
 }
 
@@ -2863,7 +2863,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								*piUse=IDS_TOOLTIPS_MILK;
 								break;
 							case Item::shears_Id:
-								{
+								{								
 									if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
 									shared_ptr<Animal> animal = dynamic_pointer_cast<Animal>(hitResult->entity);
 									if(!animal->isBaby()) *piUse=IDS_TOOLTIPS_SHEAR;
@@ -3136,7 +3136,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							}
 
 							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
+						
 							if(ocelot->isTame())
 							{
 								// 4J-PB - if you have a raw fish in your hand, you will feed the ocelot rather than have it sit/follow
@@ -3153,7 +3153,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 										}
 										else
 										{
-											*piUse=IDS_TOOLTIPS_FEED;
+											*piUse=IDS_TOOLTIPS_FEED;									
 										}
 									}
 
@@ -3182,9 +3182,9 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								}
 							}
 						}
-
+							
 						break;
-
+						
 					case eTYPE_PLAYER:
 						{
 							// Fix for #58576 - TU6: Content: Gameplay: Hit button prompt is available when attacking a host who has "Invisible" option turned on
@@ -3230,7 +3230,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							}
 							*piAction=IDS_TOOLTIPS_HIT;
 						}
-						break;
+						break; 
 					case eTYPE_ZOMBIE:
 						{
 							shared_ptr<Zombie> zomb = dynamic_pointer_cast<Zombie>(hitResult->entity);
@@ -3483,7 +3483,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				player->abilities.debugflying = !player->abilities.debugflying;
 				player->abilities.flying = !player->abilities.flying;
 			}
-#endif // PSVITA
+#endif // PSVITA		
 		}
 #endif
 
@@ -3551,8 +3551,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			player->drop();
 		}
 
-		uint64_t ullButtonsPressed=player->ullButtonsPressed;
-
+		__uint64 ullButtonsPressed=player->ullButtonsPressed;
+		
 		bool selected = false;
 #ifdef __PSVITA__
 		// 4J-PB - use the touchscreen for quickselect
@@ -3576,7 +3576,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			shared_ptr<ItemInstance> selectedItem = player->getSelectedItem();
 			// Dropping items happens over network, so if we only have one then assume that we dropped it and should hide the item
 			int iCount=0;
-
+			
 			if(selectedItem != NULL) iCount=selectedItem->GetCount();
 			if(selectedItem != NULL && !( (player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_DROP)) && selectedItem->GetCount() == 1))
 			{
@@ -3885,7 +3885,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 	}
 #ifdef __PS3__
 
-// 	while(!g_tickLevelQueue.empty())
+// 	while(!g_tickLevelQueue.empty()) 
 // 	{
 // 		Level* pLevel = g_tickLevelQueue.front();
 // 		g_tickLevelQueue.pop();
@@ -4113,7 +4113,7 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 
 			player->resetPos();
 			gameMode->initPlayer(player);
-
+			
 			player->SetXboxPad(iPrimaryPlayer);
 
 			for(int i=0;i<XUSER_MAX_COUNT;i++)
@@ -4542,7 +4542,7 @@ void Minecraft::main()
 	// 4J-PB - Can't call this for the first 5 seconds of a game - MS rule
 	//if (ProfileManager.IsFullVersion())
 	{
-		name = L"Player" + _toString<int64_t>(System::currentTimeMillis() % 1000);
+		name = L"Player" + _toString<__int64>(System::currentTimeMillis() % 1000);
 		sessionId = L"-";
 		/* 4J - TODO - get a session ID from somewhere?
 		if (args.length > 0) name = args[0];
@@ -4647,7 +4647,7 @@ void Minecraft::delayTextureReload()
 	reloadTextures = true;
 }
 
-int64_t Minecraft::currentTimeMillis()
+__int64 Minecraft::currentTimeMillis()
 {
 	return System::currentTimeMillis();//(Sys.getTime() * 1000) / Sys.getTimerResolution();
 }
@@ -5018,8 +5018,8 @@ int Minecraft::MustSignInReturnedPSN(void *pParam, int iPad, C4JStorage::EMessag
 {
     Minecraft* pMinecraft = (Minecraft *)pParam;
 
-    if(result == C4JStorage::EMessage_ResultAccept)
-    {
+    if(result == C4JStorage::EMessage_ResultAccept) 
+    {        
 		SQRNetworkManager_Orbis::AttemptPSNSignIn(&Minecraft::InGame_SignInReturned, pMinecraft, false, iPad);
     }
 

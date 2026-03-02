@@ -23,7 +23,7 @@ private:
 	bool m_costsChanged; // 4J Added
 
 public:
-	int64_t nameSeed;
+	__int64 nameSeed;
 
 public:
 	int costs[3];

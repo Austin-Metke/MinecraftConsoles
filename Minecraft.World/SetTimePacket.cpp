@@ -6,12 +6,12 @@
 
 
 
-SetTimePacket::SetTimePacket()
+SetTimePacket::SetTimePacket() 
 {
 	time = 0;
 }
 
-SetTimePacket::SetTimePacket(int64_t time)
+SetTimePacket::SetTimePacket(__int64 time)
 {
 	this->time = time;
 }
@@ -21,7 +21,7 @@ void SetTimePacket::read(DataInputStream *dis) //throws IOException
 	time = dis->readLong();
 }
 
-void SetTimePacket::write(DataOutputStream *dos) //throws IOException
+void SetTimePacket::write(DataOutputStream *dos) //throws IOException 
 {
 	dos->writeLong(time);
 }

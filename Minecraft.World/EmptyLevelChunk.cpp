@@ -210,7 +210,7 @@ bool EmptyLevelChunk::testSetBlocksAndData(byteArray data, int x0, int y0, int z
 	return false;
 }
 
-Random *EmptyLevelChunk::getRandom(int64_t l)
+Random *EmptyLevelChunk::getRandom(__int64 l)
 {
 	return new Random((level->getSeed() + x * x * 4987142 + x * 5947611 + z * z * 4392871l + z * 389711) ^ l);
 }

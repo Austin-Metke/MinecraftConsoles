@@ -56,13 +56,13 @@ protected:
 		ThreadStorage();
 	};
 	static DWORD tlsIdxShape;
-public:
+public:	
 	// Each new thread that needs to use Vec3 pools will need to call one of the following 2 functions, to either create its own
 	// local storage, or share the default storage already allocated by the main thread
 	static void CreateNewThreadStorage();
 	static void ReleaseThreadStorage();
 
-public:
+public:	
     static const int TILE_NUM_COUNT = 4096;
     static const int TILE_NUM_MASK = 0xfff; // 4096 - 1
     static const int TILE_NUM_SHIFT = 12; // 4096 is 12 bits
@@ -87,7 +87,7 @@ public:
         float pitch;
 
         SoundType(eMATERIALSOUND_TYPE eMaterialSound, float volume, float pitch, int iBreakSound = -1, int iPlaceSound = -1);
-
+	
 		float getVolume() const;
 		float getPitch() const;
 		//wstring getBreakSound() const { return breakSound; }
@@ -100,7 +100,7 @@ public:
     static SoundType *SOUND_NORMAL;
     static SoundType *SOUND_WOOD;
     static SoundType *SOUND_GRAVEL;
-    static SoundType *SOUND_GRASS;
+    static SoundType *SOUND_GRASS; 
     static SoundType *SOUND_STONE;
     static SoundType *SOUND_METAL;
     static SoundType *SOUND_GLASS;
@@ -287,7 +287,7 @@ public:
 	static const int redstoneLight_Id = 123;
 	static const int redstoneLight_lit_Id = 124;
 
-
+	
 	static const int woodSlab_Id = 125;
 	static const int woodSlabHalf_Id = 126;
 	static const int cocoa_Id = 127;
@@ -456,7 +456,7 @@ public:
 	static TripWireSourceTile *tripWireSource;
 	static Tile *tripWire;
 	static Tile *emeraldBlock;
-
+    
 	static Tile *cocoa;
 	static Tile *skull;
 
@@ -464,7 +464,7 @@ public:
 	static Tile *flowerPot;
 	static Tile *carrots;
 	static Tile *potatoes;
-	static Tile *anvil;
+	static Tile *anvil;	
 	static Tile *netherQuartz;
 	static Tile *quartzBlock;
 	static Tile *stairs_quartz;
@@ -636,9 +636,9 @@ public:
 	virtual void playerWillDestroy(Level *level, int x, int y, int z, int data, shared_ptr<Player> player);
 	virtual void onRemoving(Level *level, int x, int y, int z, int data);
 	virtual void handleRain(Level *level, int x, int y, int z);
-	virtual void levelTimeChanged(Level *level, int64_t delta, int64_t newTime);
+	virtual void levelTimeChanged(Level *level, __int64 delta, __int64 newTime);
 	virtual void registerIcons(IconRegister *iconRegister);
-	virtual wstring getTileItemIconName();
+	virtual wstring getTileItemIconName();	
 	// 4J Using per-item textures now
 	Tile *setTextureName(const wstring &name);
 	// AP - added this function so we can generate the faceFlags for a block in a single fast function

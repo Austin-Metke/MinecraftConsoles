@@ -93,8 +93,8 @@ void ServerLevel::staticCtor()
 
 ServerLevel::ServerLevel(MinecraftServer *server, shared_ptr<LevelStorage>levelStorage, const wstring& levelName, int dimension, LevelSettings *levelSettings) : Level(levelStorage, levelName, levelSettings, Dimension::getNew(dimension), false)
 {
-	InitializeCriticalSection(&m_limiterCS);
-	InitializeCriticalSection(&m_tickNextTickCS);
+	InitializeCriticalSection(&m_limiterCS);	
+	InitializeCriticalSection(&m_tickNextTickCS);	
 	InitializeCriticalSection(&m_csQueueSendTileUpdates);
 	m_fallingTileCount = 0;
 	m_primedTntCount = 0;
@@ -192,7 +192,7 @@ void ServerLevel::tick()
 		if (!somebodyWokeUp)
 		{
 			// skip time until new day
-			int64_t newTime = levelData->getTime() + TICKS_PER_DAY;
+			__int64 newTime = levelData->getTime() + TICKS_PER_DAY;
 
 			// 4J : WESTY : Changed so that time update goes through stats tracking update code.
 			//levelData->setTime(newTime - (newTime % TICKS_PER_DAY));
@@ -222,7 +222,7 @@ void ServerLevel::tick()
 			}
 		}
 	}
-
+	
 	PIXBeginNamedEvent(0,"runTileEvents");
 	// run after entity updates
 	runTileEvents();
@@ -230,7 +230,7 @@ void ServerLevel::tick()
 
 	//4J - temporarily disabling saves as they are causing gameplay to generally stutter quite a lot
 
-	int64_t time = levelData->getTime() + 1;
+	__int64 time = levelData->getTime() + 1;
 // 4J Stu - Putting this back in, but I have reduced the number of chunks that save when not forced
 #ifdef _LARGE_WORLDS
 	if (time % (saveInterval) == (dimension->id + 1))
@@ -492,7 +492,7 @@ void ServerLevel::tickTiles()
 			{
 				Biome *b = getBiome(x + xo, z + zo);
 				if (b->hasRain())
-				{
+				{			
 					int tile = getTile(x + xo, yy - 1, z + zo);
 					if (tile != 0)
 					{
@@ -593,7 +593,7 @@ bool ServerLevel::tickPendingTicks(bool force)
 		//throw new IllegalStateException("TickNextTick list out of synch");
 	}
 	if (count > MAX_TICK_TILES_PER_TICK) count = MAX_TICK_TILES_PER_TICK;
-
+	
 	AUTO_VAR(itTickList, tickNextTickList.begin());
 	for (int i = 0; i < count; i++)
 	{
@@ -783,7 +783,7 @@ void ServerLevel::setInitialSpawn(LevelSettings *levelSettings)
 		zSpawn += random.nextInt(64) - random.nextInt(64);
 		if(zSpawn>maxXZ) zSpawn=0;
 		if(zSpawn<minXZ) zSpawn=0;
-
+		
 		if (++tries == 1000) break;
 	}
 
@@ -811,7 +811,7 @@ void ServerLevel::generateBonusItemsNearSpawn()
 			int x = xx + xs;
 			int z = zz + zs;
 			int y = getTopSolidBlock( x, z ) - 1;
-
+			
 			if( getTile( x, y, z ) == Tile::chest_Id )
 			{
 				shared_ptr<ChestTileEntity> chest = dynamic_pointer_cast<ChestTileEntity>(getTileEntity(x, y, z));
@@ -861,7 +861,7 @@ void ServerLevel::save(bool force, ProgressListener *progressListener, bool bAut
 	if(StorageManager.GetSaveDisabled()) return;
 
 
-	if (progressListener != NULL)
+	if (progressListener != NULL) 
 	{
 		if(bAutosave)
 		{
@@ -871,7 +871,7 @@ void ServerLevel::save(bool force, ProgressListener *progressListener, bool bAut
 		{
 			progressListener->progressStartNoAbort(IDS_PROGRESS_SAVING_LEVEL);
 		}
-
+			
 	}
 	PIXBeginNamedEvent(0,"Saving level data");
 	saveLevelData();
@@ -931,7 +931,7 @@ void ServerLevel::saveToDisc(ProgressListener *progressListener, bool autosave)
 		DLCPack * pDLCPack=pDLCTexPack->getDLCInfoParentPack();
 
 		if(!pDLCPack->hasPurchasedFile( DLCManager::e_DLCType_Texture, L"" ))
-		{
+		{	
 			return;
 		}
 	}
@@ -1032,7 +1032,7 @@ shared_ptr<Explosion> ServerLevel::explode(shared_ptr<Entity> source, double x, 
 			}
 			else
 			{
-				for(unsigned int j = 0; j < sentTo.size(); j++ )
+				for(unsigned int j = 0; j < sentTo.size(); j++ )	
 				{
 					shared_ptr<ServerPlayer> player2 = sentTo[j];
 					INetworkPlayer *otherPlayer = player2->connection->getNetworkPlayer();
@@ -1139,9 +1139,9 @@ EntityTracker *ServerLevel::getTracker()
 	return tracker;
 }
 
-void ServerLevel::setTimeAndAdjustTileTicks(int64_t newTime)
+void ServerLevel::setTimeAndAdjustTileTicks(__int64 newTime)
 {
-	int64_t delta = newTime - levelData->getTime();
+	__int64 delta = newTime - levelData->getTime();
 	// 4J - can't directly adjust m_delay in a set as it has a const interator, since changing values in here might change the ordering of the elements in the set.
 	// Instead move to a vector, do the adjustment, put back in the set.
 	vector<TickNextTickData> temp;
@@ -1303,7 +1303,7 @@ void ServerLevel::entityRemovedExtra(shared_ptr<Entity> e)
 		}
 //		printf("entity removed: item entity count now %d\n",m_itemEntities.size());
 		LeaveCriticalSection(&m_limiterCS);
-	}
+	} 
 	else if( dynamic_pointer_cast<HangingEntity>(e) != NULL )
 	{
 		EnterCriticalSection(&m_limiterCS);
@@ -1316,7 +1316,7 @@ void ServerLevel::entityRemovedExtra(shared_ptr<Entity> e)
 		}
 		//		printf("entity removed: item entity count now %d\n",m_itemEntities.size());
 		LeaveCriticalSection(&m_limiterCS);
-	}
+	} 
 	else if( dynamic_pointer_cast<Arrow>(e) != NULL )
 	{
 		EnterCriticalSection(&m_limiterCS);
@@ -1329,7 +1329,7 @@ void ServerLevel::entityRemovedExtra(shared_ptr<Entity> e)
 		}
 //		printf("entity removed: arrow entity count now %d\n",m_arrowEntities.size());
 		LeaveCriticalSection(&m_limiterCS);
-	}
+	} 
 	else if( dynamic_pointer_cast<ExperienceOrb>(e) != NULL )
 	{
 		EnterCriticalSection(&m_limiterCS);
@@ -1342,7 +1342,7 @@ void ServerLevel::entityRemovedExtra(shared_ptr<Entity> e)
 		}
 //		printf("entity removed: experience orb entity count now %d\n",m_arrowEntities.size());
 		LeaveCriticalSection(&m_limiterCS);
-	}
+	} 
 	else if( dynamic_pointer_cast<PrimedTnt>(e) != NULL )
 	{
 		EnterCriticalSection(&m_limiterCS);

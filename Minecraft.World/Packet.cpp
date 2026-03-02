@@ -30,7 +30,7 @@ void Packet::staticCtor()
 	map(8, true, false, true, true, typeid(SetHealthPacket), SetHealthPacket::create);
 	map(9, true, true, true, false, typeid(RespawnPacket), RespawnPacket::create);
 
-	map(10, true, true, true, false, typeid(MovePlayerPacket), MovePlayerPacket::create);
+	map(10, true, true, true, false, typeid(MovePlayerPacket), MovePlayerPacket::create);	
 	map(11, true, true, true, true, typeid(MovePlayerPacket::Pos), MovePlayerPacket::Pos::create);
 	map(12, true, true, true, true, typeid(MovePlayerPacket::Rot), MovePlayerPacket::Rot::create);
 	map(13, true, true, true, true, typeid(MovePlayerPacket::PosRot), MovePlayerPacket::PosRot::create);
@@ -254,7 +254,7 @@ void Packet::renderAllPacketStats()
 
 void Packet::renderAllPacketStatsKey()
 {
-#ifndef _CONTENT_PACKAGE
+#ifndef _CONTENT_PACKAGE	
 #if PACKET_ENABLE_STAT_TRACKING
 	Minecraft *pMinecraft = Minecraft::GetInstance();
 	int total = Packet::renderableStats.size();
@@ -271,9 +271,9 @@ void Packet::renderAllPacketStatsKey()
 #endif
 }
 
-int64_t Packet::getIndexedStatValue(unsigned int samplePos, unsigned int renderableId)
+__int64 Packet::getIndexedStatValue(unsigned int samplePos, unsigned int renderableId)
 {
-	int64_t val = 0;
+	__int64 val = 0;
 
 #ifndef _CONTENT_PACKAGE
 #if PACKET_ENABLE_STAT_TRACKING
@@ -285,13 +285,13 @@ int64_t Packet::getIndexedStatValue(unsigned int samplePos, unsigned int rendera
 }
 
 
-shared_ptr<Packet> Packet::getPacket(int id)
+shared_ptr<Packet> Packet::getPacket(int id) 
 {
 	// 4J - removed try/catch
 	//    try
 	//	{
 	return idToCreateMap[id]();
-	//    }
+	//    } 
 	//	catch (exception e)
 	//	{
 	//		// TODO 4J JEV print stack trace, newInstance doesnt throw an exception in c++ yet.
@@ -366,11 +366,11 @@ shared_ptr<Packet> Packet::readPacket(DataInputStream *dis, bool isServer) // th
 
 	packet = getPacket(id);
 	if (packet == NULL) assert(false);//throw new IOException(wstring(L"Bad packet id ") + _toString<int>(id));
-
+	
 	//app.DebugPrintf("%s reading packet %d\n", isServer ? "Server" : "Client", packet->getId());
 	packet->read(dis);
 	//    }
-	//	catch (EOFException e)
+	//	catch (EOFException e) 
 	//	{
 	//       // reached end of stream
 	//        OutputDebugString("Reached end of stream");
@@ -409,7 +409,7 @@ void Packet::writePacket(shared_ptr<Packet> packet, DataOutputStream *dos) // th
 void Packet::writeUtf(const wstring& value, DataOutputStream *dos) // throws IOException TODO 4J JEV, should this declare a throws?
 {
 #if 0
-	if (value.length() > Short::MAX_VALUE)
+	if (value.length() > Short::MAX_VALUE) 
 	{
 		throw new IOException(L"String too big");
 	}
@@ -437,7 +437,7 @@ wstring Packet::readUtf(DataInputStream *dis, int maxLength) // throws IOExcepti
 	}
 
 	wstring builder = L"";
-	for (int i = 0; i < stringLength; i++)
+	for (int i = 0; i < stringLength; i++) 
 	{
 		wchar_t rc = dis->readChar();
 		builder.push_back( rc );
@@ -455,12 +455,12 @@ void Packet::PacketStatistics::addPacket(int bytes)
 	count++;
 	totalSize += bytes;
 
-	// 4J Added
+	// 4J Added	
 	countSamples[samplesPos & (512 - 1)]++;
 	sizeSamples[samplesPos & (512 - 1)] += (unsigned int) bytes;
 }
 
-int Packet::PacketStatistics::getCount()
+int Packet::PacketStatistics::getCount() 
 {
 	return count;
 }
@@ -489,7 +489,7 @@ void Packet::PacketStatistics::renderStats( )
 #endif
 }
 
-int64_t Packet::PacketStatistics::getCountSample(int samplePos)
+__int64 Packet::PacketStatistics::getCountSample(int samplePos)
 {
 	if(samplePos == 511)
 	{

@@ -26,7 +26,7 @@ using namespace std;
 
 // AP - this is a system that works out which chunks actually need to be grouped together via the deferral system when doing chunk::rebuild. Doing this will reduce the number
 // of chunks built in a single group and reduce the chance of seeing through the landscape when digging near the edges/corners of a chunk.
-// I've added another chunk flag to mark a chunk critical so it swipes a bit from the reference count value (goes to 3 bits to 2). This works on Vita because it doesn't have
+// I've added another chunk flag to mark a chunk critical so it swipes a bit from the reference count value (goes to 3 bits to 2). This works on Vita because it doesn't have 
 // split screen reference counting.
 #ifdef __PSVITA__
 #define _CRITICAL_CHUNKS
@@ -203,7 +203,7 @@ public:
 	// 4J - added for new render list handling
 	// This defines the maximum size of renderable level, must be big enough to cope with actual size of level + view distance at each side
 	// so that we can render the "infinite" sea at the edges
-	static const int	MAX_LEVEL_RENDER_SIZE[3];
+	static const int	MAX_LEVEL_RENDER_SIZE[3];	
 	static const int    DIMENSION_OFFSETS[3];
 	// This is the TOTAL area of columns of chunks to be allocated for render round the players. So for one player, it would be a region of
 	// sqrt(PLAYER_RENDER_AREA) x sqrt(PLAYER_RENDER_AREA)
@@ -258,7 +258,7 @@ public:
 	XLockFreeStack<int> dirtyChunksLockFreeStack;
 
 	bool				dirtyChunkPresent;
-	int64_t				lastDirtyChunkFound;
+	__int64				lastDirtyChunkFound;
 	static const int	FORCE_DIRTY_CHUNK_CHECK_PERIOD_MS = 250;
 
 #ifdef _LARGE_WORLDS

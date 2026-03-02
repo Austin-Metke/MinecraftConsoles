@@ -142,7 +142,7 @@ void ServerPlayer::flagEntitiesToBeRemoved(unsigned int *flags, bool *removedFou
 			unsigned int j = index % 32;
 			unsigned int uiMask = 0x80000000 >> j;
 
-			flags[i] |= uiMask;
+			flags[i] |= uiMask;			
 		}
 	}
 }
@@ -345,14 +345,14 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 			else
 			{
 				bool canSendOnSlowQueue = MinecraftServer::canSendOnSlowQueue(connection->getNetworkPlayer());
-
+				
 //				app.DebugPrintf("%ls: canSendOnSlowQueue %d, countDelayedPackets %d GetSendQueueSizeBytes %d done: %d",
 //					connection->getNetworkPlayer()->GetUID().toString().c_str(),
 //					canSendOnSlowQueue, connection->countDelayedPackets(),
 //					g_NetworkManager.GetHostPlayer()->GetSendQueueSizeBytes( NULL, true ),
 //					connection->done);
-
-				if( dontDelayChunks ||
+	
+				if( dontDelayChunks || 
 					(canSendOnSlowQueue &&
 					(connection->countDelayedPackets() < 4 )&&
 #ifdef _XBOX_ONE
@@ -361,7 +361,7 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 					(g_NetworkManager.GetHostPlayer()->GetSendQueueSizeBytes( NULL, true ) < 8192 )&&
 #else
 					(g_NetworkManager.GetHostPlayer()->GetSendQueueSizeMessages( NULL, true ) < 4 )&&
-#endif
+#endif 
 					//(tickCount - lastBrupSendTickCount) > (connection->getNetworkPlayer()->GetCurrentRtt()>>4) &&
 					!connection->done) )
 				{
@@ -369,9 +369,9 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 					okToSend = true;
 					MinecraftServer::s_slowQueuePacketSent = true;
 
-//					static unordered_map<wstring,int64_t> mapLastTime;
-//					int64_t thisTime = System::currentTimeMillis();
-//					int64_t lastTime = mapLastTime[connection->getNetworkPlayer()->GetUID().toString()];
+//					static unordered_map<wstring,__int64> mapLastTime;
+//					__int64 thisTime = System::currentTimeMillis();
+//					__int64 lastTime = mapLastTime[connection->getNetworkPlayer()->GetUID().toString()];
 //					app.DebugPrintf(" - OK to send (%d ms since last)\n", thisTime - lastTime);
 //					mapLastTime[connection->getNetworkPlayer()->GetUID().toString()] = thisTime;
 				}
@@ -445,7 +445,7 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 					for (unsigned int i = 0; i < tes->size(); i++)
 					{
 						// 4J Stu - Added delay param to ensure that these arrive after the BRUPs from above
-						// Fix for #9169 - ART : Sign text is replaced with the words ï¿½Awaiting approvalï¿½.
+						// Fix for #9169 - ART : Sign text is replaced with the words “Awaiting approval”.
 						broadcast(tes->at(i), !connection->isLocal() && !dontDelayChunks);
 					}
 					delete tes;
@@ -462,7 +462,7 @@ void ServerPlayer::doTickB(bool ignorePortal)
 	if(app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad())&(1L<<eDebugSetting_GoToNether))
 	{
 		if(level->dimension->id == 0 )
-		{
+		{		
 			ignorePortal=false;
 			isInsidePortal=true;
 			portalTime=1;
@@ -473,7 +473,7 @@ void ServerPlayer::doTickB(bool ignorePortal)
 // 	else if (app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad())&(1L<<eDebugSetting_GoToEnd))
 // 	{
 // 		if(level->dimension->id == 0 )
-// 		{
+// 		{		
 // 			server->players->toggleDimension( dynamic_pointer_cast<ServerPlayer>( shared_from_this() ), 1 );
 // 		}
 // 		unsigned int uiVal=app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad());
@@ -482,7 +482,7 @@ void ServerPlayer::doTickB(bool ignorePortal)
 	else if (app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad())&(1L<<eDebugSetting_GoToOverworld))
 	{
 		if(level->dimension->id != 0 )
-		{
+		{		
 			ignorePortal=false;
 			isInsidePortal=true;
 			portalTime=1;
@@ -577,7 +577,7 @@ bool ServerPlayer::hurt(DamageSource *dmgSource, int dmg)
 		// getEntity returns the owner of projectiles, and this would never be the arrow. The owner is sometimes NULL.
 		shared_ptr<Entity> source = dmgSource->getDirectEntity();
 
-
+		
 		if (dynamic_pointer_cast<Player>(source) != NULL &&	(!server->pvp || !dynamic_pointer_cast<Player>(source)->isAllowedToAttackPlayers()) )
 		{
 			return false;
@@ -595,7 +595,7 @@ bool ServerPlayer::hurt(DamageSource *dmgSource, int dmg)
     bool returnVal = Player::hurt(dmgSource, dmg);
 
 	if( returnVal )
-	{
+	{		
 		// 4J Stu - Work out the source of this damage for telemetry
 		m_lastDamageSource = eTelemetryChallenges_Unknown;
 
@@ -667,7 +667,7 @@ bool ServerPlayer::hurt(DamageSource *dmgSource, int dmg)
 					m_lastDamageSource = eTelemetryPlayerDeathSource_Ghast;
 					break;
 				};
-			}
+			}		
 		};
 	}
 
@@ -707,7 +707,7 @@ void ServerPlayer::changeDimension(int i)
 				INetworkPlayer *checkPlayer = servPlayer->connection->getNetworkPlayer();
 				if(thisPlayer != checkPlayer && checkPlayer != NULL && thisPlayer->IsSameSystem( checkPlayer ) && !servPlayer->wonGame )
 				{
-					servPlayer->wonGame = true;
+					servPlayer->wonGame = true;					
 					servPlayer->connection->send( shared_ptr<GameEventPacket>( new GameEventPacket(GameEventPacket::WIN_GAME, thisPlayer->GetUserIndex() ) ) );
 					app.DebugPrintf("Sending packet to %d\n", thisPlayer->GetUserIndex());
 				}
@@ -759,7 +759,7 @@ void ServerPlayer::take(shared_ptr<Entity> e, int orgCount)
         if (e->GetType() == eTYPE_ARROW)
 		{
             entityTracker->broadcast(e, shared_ptr<TakeItemEntityPacket>( new TakeItemEntityPacket(e->entityId, entityId) ) );
-        }
+        }		
         if (e->GetType() == eTYPE_EXPERIENCEORB)
 		{
             entityTracker->broadcast(e, shared_ptr<TakeItemEntityPacket>( new TakeItemEntityPacket(e->entityId, entityId) ) );
@@ -841,7 +841,7 @@ bool ServerPlayer::startCrafting(int x, int y, int z)
 	{
 		app.DebugPrintf("ServerPlayer tried to open crafting container when one was already open\n");
 	}
-
+	
 	return true;
 }
 
@@ -858,7 +858,7 @@ bool ServerPlayer::startEnchanting(int x, int y, int z)
 	else
 	{
 		app.DebugPrintf("ServerPlayer tried to open enchanting container when one was already open\n");
-	}
+	}	
 
 	return true;
 }
@@ -876,7 +876,7 @@ bool ServerPlayer::startRepairing(int x, int y, int z)
 	else
 	{
 		app.DebugPrintf("ServerPlayer tried to open enchanting container when one was already open\n");
-	}
+	}	
 
 	return true;
 }
@@ -932,7 +932,7 @@ bool ServerPlayer::openTrap(shared_ptr<DispenserTileEntity> trap)
 	{
 		app.DebugPrintf("ServerPlayer tried to open dispenser when one was already open\n");
 	}
-
+	
 	return true;
 }
 
@@ -1234,7 +1234,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxEnemies)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxEnemies)));		
 			}
 		}
 		break;
@@ -1245,7 +1245,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxVillagers)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxVillagers)));		
 			}
 		}
 		break;
@@ -1255,7 +1255,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredPigsSheepCows)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredPigsSheepCows)));		
 			}
 		}
 		break;
@@ -1265,7 +1265,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredChickens)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredChickens)));		
 			}
 		}
 		break;
@@ -1275,7 +1275,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredMooshrooms)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredMooshrooms)));		
 			}
 		}
 		break;
@@ -1286,7 +1286,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredWolves)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBredWolves)));		
 			}
 		}
 		break;
@@ -1297,7 +1297,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			shared_ptr<ServerPlayer> player = server->getPlayers()->players[i];
 			if(shared_from_this()==player)
 			{
-				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerCantShearMooshroom)));
+				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerCantShearMooshroom)));		
 			}
 		}
 		break;
@@ -1321,7 +1321,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			{
 				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerCantSpawnInPeaceful)));
 			}
-		}
+		}		
 		break;
 
 	case IDS_MAX_BOATS:
@@ -1332,7 +1332,7 @@ void ServerPlayer::displayClientMessage(int messageId)
 			{
 				player->connection->send(shared_ptr<ChatPacket>( new ChatPacket(name, ChatPacket::e_ChatPlayerMaxBoats)));
 			}
-		}
+		}				
 		break;
 
 	default:
@@ -1391,7 +1391,7 @@ void ServerPlayer::onEffectRemoved(MobEffectInstance *effect)
 	connection->send(shared_ptr<RemoveMobEffectPacket>( new RemoveMobEffectPacket(entityId, effect) ) );
 }
 
-void ServerPlayer::teleportTo(double x, double y, double z)
+void ServerPlayer::teleportTo(double x, double y, double z) 
 {
 	connection->teleport(x, y, z, yRot, xRot);
 }
@@ -1508,7 +1508,7 @@ void ServerPlayer::handleCollectItem(shared_ptr<ItemInstance> item)
 }
 
 #ifndef _CONTENT_PACKAGE
-void ServerPlayer::debug_setPosition(double x, double y, double z, double nYRot, double nXRot)
+void ServerPlayer::debug_setPosition(double x, double y, double z, double nYRot, double nXRot) 
 {
 	connection->teleport(x, y, z, nYRot, nXRot);
 }
