@@ -48,14 +48,31 @@ else()
 endif()
 
 add_library(MinecraftWorld STATIC ${MINECRAFT_WORLD_SOURCES})
-target_include_directories(MinecraftWorld PRIVATE
-  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/x64headers"
-)
-target_compile_definitions(MinecraftWorld PRIVATE
-  $<$<CONFIG:Debug>:_LARGE_WORLDS;_DEBUG_MENUS_ENABLED;_DEBUG;_LIB;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINDOWS64>
-  $<$<NOT:$<CONFIG:Debug>>:_LARGE_WORLDS;_DEBUG_MENUS_ENABLED;_LIB;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINDOWS64>
-)
+if(MINECRAFT_USE_GLES3)
+  target_include_directories(MinecraftWorld PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/x64headers"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.Client/GLES3/4JLibs/inc"
+  )
+  target_compile_definitions(MinecraftWorld PRIVATE
+    __GLES3__
+    _LARGE_WORLDS
+    _DEBUG_MENUS_ENABLED
+    _LIB
+    _CRT_NON_CONFORMING_SWPRINTFS
+    _CRT_SECURE_NO_WARNINGS
+    $<$<CONFIG:Debug>:_DEBUG>
+  )
+else()
+  target_include_directories(MinecraftWorld PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/x64headers"
+  )
+  target_compile_definitions(MinecraftWorld PRIVATE
+    $<$<CONFIG:Debug>:_LARGE_WORLDS;_DEBUG_MENUS_ENABLED;_DEBUG;_LIB;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINDOWS64>
+    $<$<NOT:$<CONFIG:Debug>>:_LARGE_WORLDS;_DEBUG_MENUS_ENABLED;_LIB;_CRT_NON_CONFORMING_SWPRINTFS;_CRT_SECURE_NO_WARNINGS;_WINDOWS64>
+  )
+endif()
 if(MSVC)
   configure_msvc_target(MinecraftWorld)
 endif()
