@@ -90,6 +90,10 @@ typedef XUID GameSessionUID;
 #include "PSVitaTypes.h"
 #include "PSVitaStubs.h"
 #include "PSVitaMaths.h"
+#elif defined __GLES3__
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 #else
 #include <unordered_map>
 #include <unordered_set>
@@ -173,6 +177,8 @@ void MemSect(int sect);
 #include "..\Minecraft.Client\PSVita\4JLibs\inc\4J_Render.h"
 #include "..\Minecraft.Client\PSVita\4JLibs\inc\4J_Storage.h"
 #include "..\Minecraft.Client\PSVita\4JLibs\inc\4J_Input.h"
+#elif defined __GLES3__
+#include "../Minecraft.Client/GLES3/4JLibs/inc/4J_Render.h"
 #else
 #include "..\Minecraft.Client\Orbis\4JLibs\inc\4J_Profile.h"
 #include "..\Minecraft.Client\Orbis\4JLibs\inc\4J_Render.h"
@@ -231,6 +237,8 @@ void MemSect(int sect);
 #include "..\Minecraft.Client\PSVitaMedia\strings.h"		// TODO - create PSVita-specific version of this
 #include "..\Minecraft.Client\PSVita\Sentient\SentientManager.h"
 #include "..\Minecraft.Client\PSVita\Sentient\MinecraftTelemetry.h"
+#elif defined __GLES3__
+// TODO: add GLES3-specific App, strings, and telemetry headers when available
 #else
 #include "..\Minecraft.Client\Orbis\Orbis_App.h"
 #include "..\Minecraft.Client\OrbisMedia\strings.h"
