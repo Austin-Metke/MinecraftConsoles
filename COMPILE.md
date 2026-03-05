@@ -44,3 +44,23 @@ Notes:
 - Contributors on macOS or Linux need a Windows machine or VM to build the project. Running the game via Wine is separate from having a supported build environment.
 - Post-build asset copy is automatic for `MinecraftClient` in CMake (Debug and Release variants).
 - The game relies on relative paths (for example `Common\Media\...`), so launching from the output directory is required.
+
+## CMake (GLES3 – Linux)
+
+Install dependencies:
+
+```bash
+sudo apt install libgles2-mesa-dev libegl1-mesa-dev pkg-config
+```
+
+Configure:
+
+```bash
+cmake -S . -B build-gles3 -DMINECRAFT_USE_GLES3=ON -DCMAKE_BUILD_TYPE=Debug
+```
+
+Build:
+
+```bash
+cmake --build build-gles3 --config Debug --target MinecraftClient
+```
