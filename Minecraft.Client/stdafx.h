@@ -20,7 +20,17 @@
 // #endif
 // #endif
 
-#ifdef __PS3__
+#ifdef __GLES3__
+#define AUTO_VAR(_var, _val) auto _var = _val
+#include <stdio.h>
+#include <stdlib.h>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include "GLES3/GLES3_Types.h"
+#include "GLES3/GLES3_Maths.h"
+#define HRESULT_SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
+#elif defined __PS3__
 
 #include "Ps3Types.h"
 #include "Ps3Stubs.h"
@@ -186,6 +196,9 @@ typedef XUID GameSessionUID;
 	#include "PSVita\4JLibs\inc\4J_Profile.h"
 	#include "PSVita\4JLibs\inc\4J_Render.h"
 	#include "PSVita\4JLibs\inc\4J_Storage.h"
+#elif defined __GLES3__
+	// OpenGL ES 3.0 platform – render backend only (input/storage are platform-specific)
+	#include "GLES3/4JLibs/inc/4J_Render.h"
 #else
 	#include "Orbis\4JLibs\inc\4J_Input.h"	
 	#include "Orbis\4JLibs\inc\4J_Profile.h"
